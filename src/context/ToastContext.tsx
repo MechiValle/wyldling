@@ -39,11 +39,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed bottom-6 left-0 right-0 flex flex-col items-center gap-2 z-[100] px-4 pointer-events-none">
+      <div className="fixed bottom-6 left-0 right-0 flex flex-col items-center gap-2 z-100 px-4 pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`bg-sage-meadow text-white text-sm sm:text-base px-3 py-2 sm:px-5 sm:py-3 rounded-xl shadow-lg font-body text-center max-w-[85vw] sm:max-w-sm transition-opacity duration-500 ease-out animate-fade-in-up ${
+            className={`bg-sage-meadow text-white text-sm px-3 py-2 rounded-xl shadow-lg font-body text-center max-w-[85vw] sm:max-w-sm transition-opacity duration-300 ease-out animate-fade-in-up ${
               toast.leaving ? 'opacity-0' : 'opacity-100'
             }`}
           >

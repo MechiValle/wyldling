@@ -21,7 +21,9 @@ export function FoundCheckbox({ checked, onChange, label }: Props) {
     <span className="inline-flex items-center gap-2 cursor-pointer select-none">
       <span
         onClick={handleClick}
-        className={`w-6 h-6 rounded-md border-2 border-sage-meadow flex items-center justify-center bg-oat-linen dark:bg-twilight-plum ${checked ? 'bg-sage-meadow text-white' : ''} ${justChecked ? 'animate-bloom' : ''}`}
+        className={`w-6 h-6 rounded-md border-2 border-sage-meadow flex items-center justify-center ${
+          checked ? 'bg-sage-meadow dark:bg-sage-meadow text-white' : 'bg-oat-linen dark:bg-twilight-plum'
+        } ${justChecked ? 'animate-bloom' : ''}`}
       >
         {checked && '✓'}
       </span>

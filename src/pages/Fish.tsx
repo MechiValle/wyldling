@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { Card } from '../components/Card'
 import { CardGrid } from '../components/CardGrid'
 import { Modal } from '../components/Modal'
 import { CategoryTabs } from '../components/CategoryTabs'
-import { getImageUrl } from '../lib/storage'
+import { getImageUrl, preloadImages } from '../lib/storage'
 import { getCaughtFish, toggleFishCaught } from '../lib/progress'
 import type { Item } from '../types/Item'
 
@@ -19,19 +20,26 @@ type AvailabilityRow = {
 type FishWithLocations = Item & { locationNames: string[] }
 
 export function Fish() {
+  const [searchParams] = useSearchParams()
+  const openId = searchParams.get('open')
+
   const [fish, setFish] = useState<FishWithLocations[]>([])
   const [locationOptions, setLocationOptions] = useState<string[]>(['All'])
   const [activeLocation, setActiveLocation] = useState('All')
+  const [pageLoading, setPageLoading] = useState(true)
+
   const [selected, setSelected] = useState<Item | null>(null)
   const [availability, setAvailability] = useState<AvailabilityRow[]>([])
   const [shape, setShape] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [modalLoading, setModalLoading] = useState(false)
   const [caughtIds, setCaughtIds] = useState<number[]>([])
 
   useEffect(() => {
     setCaughtIds(getCaughtFish())
 
     async function fetchFish() {
+      setPageLoading(true)
+
       const { data: fishItems, error: fishError } = await supabase
         .from('items')
         .select('*')
@@ -40,6 +48,7 @@ export function Fish() {
 
       if (fishError) {
         console.error(fishError)
+        setPageLoading(false)
         return
       }
 
@@ -49,6 +58,7 @@ export function Fish() {
 
       if (availError) {
         console.error(availError)
+        setPageLoading(false)
         return
       }
 
@@ -70,8 +80,11 @@ export function Fish() {
         locationNames: Array.from(locationsByFish.get(item.id) ?? []),
       }))
 
+      await preloadImages(fishWithLocations.map((item) => getImageUrl(item.image_path)))
+
       setFish(fishWithLocations)
       setLocationOptions(['All', ...Array.from(allLocations).sort()])
+      setPageLoading(false)
     }
     fetchFish()
   }, [])
@@ -80,7 +93,7 @@ export function Fish() {
     setSelected(item)
     setAvailability([])
     setShape(null)
-    setLoading(true)
+    setModalLoading(true)
 
     const [availabilityResult, shapeResult] = await Promise.all([
       supabase
@@ -107,8 +120,14 @@ export function Fish() {
       setShape(shapeData?.fish_shapes?.name ?? null)
     }
 
-    setLoading(false)
+    setModalLoading(false)
   }
+
+  useEffect(() => {
+    if (pageLoading || !openId) return
+    const match = fish.find((f) => f.id === Number(openId))
+    if (match) openFish(match)
+  }, [pageLoading, fish, openId])
 
   function handleToggleCaught(id: number) {
     const updated = toggleFishCaught(id)
@@ -120,25 +139,33 @@ export function Fish() {
       ? fish
       : fish.filter((item) => item.locationNames.includes(activeLocation))
 
+  const fixedLocation = availability[0]?.locations?.name ?? null
+
   return (
     <div>
       <h1 className="font-display text-3xl font-bold mb-4">Fish</h1>
 
-      <CategoryTabs options={locationOptions} active={activeLocation} onChange={setActiveLocation} />
+      {pageLoading ? (
+        <p className="text-center italic mt-10">Loading...</p>
+      ) : (
+        <>
+          <CategoryTabs options={locationOptions} active={activeLocation} onChange={setActiveLocation} />
 
-      <CardGrid>
-        {visibleFish.map((item) => (
-          <Card
-            key={item.id}
-            name={item.name}
-            image={getImageUrl(item.image_path)}
-            category="fish"
-            onClick={() => openFish(item)}
-            checked={caughtIds.includes(item.id)}
-            onToggleChecked={() => handleToggleCaught(item.id)}
-          />
-        ))}
-      </CardGrid>
+          <CardGrid>
+            {visibleFish.map((item) => (
+              <Card
+                key={item.id}
+                name={item.name}
+                image={getImageUrl(item.image_path)}
+                category="fish"
+                onClick={() => openFish(item)}
+                checked={caughtIds.includes(item.id)}
+                onToggleChecked={() => handleToggleCaught(item.id)}
+              />
+            ))}
+          </CardGrid>
+        </>
+      )}
 
       {selected && (
         <Modal onClose={() => setSelected(null)}>
@@ -149,22 +176,20 @@ export function Fish() {
           />
           <h2 className="font-display text-2xl font-bold text-center mb-1">{selected.name}</h2>
 
-          {loading ? (
+          {modalLoading ? (
             <p className="text-center text-sm italic mt-6 mb-6">Loading...</p>
           ) : (
             <>
-              {shape && (
-                <p className="text-sm text-center mb-4">
-                  <span className="font-semibold">Shape:</span> {shape}
-                </p>
-              )}
+              <div className="text-sm text-center mb-4 flex flex-col gap-1">
+                {shape && <p><span className="font-semibold">Shape:</span> {shape}</p>}
+                {fixedLocation && <p><span className="font-semibold">Where:</span> {fixedLocation}</p>}
+              </div>
 
-              <h3 className="font-display font-semibold mb-2">Availability</h3>
+              <h3 className="font-display font-semibold mb-2">Ways to catch it</h3>
               <div className="flex flex-col gap-3">
                 {availability.map((row, index) => (
                   <div key={row.id} className={index > 0 ? 'pt-3 border-t border-sage-meadow/20' : ''}>
-                    <p className="text-sm"><span className="font-semibold">Where:</span> {row.locations?.name}</p>
-                    <p className="text-sm"><span className="font-semibold">Bait:</span> {row.bait_types?.name}</p>
+                    <p className="text-sm"><span className="font-semibold">Bait:</span> {row.bait_types?.name ?? 'Any'}</p>
                     {row.weather_types?.name && (
                       <p className="text-sm"><span className="font-semibold">Weather:</span> {row.weather_types.name}</p>
                     )}

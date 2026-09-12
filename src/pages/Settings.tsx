@@ -1,54 +1,39 @@
-import { useState } from 'react'
-import { resetCaughtFish } from '../lib/progress'
-import { useToast } from '../context/ToastContext'
+import { resetCaughtFish, resetFoundRecipes, resetReachedHearts, resetGiftedFoods } from '../lib/progress'
+import { ResetProgressCard } from '../components/ResetProgressCard'
 
 export function Settings() {
-  const [confirming, setConfirming] = useState(false)
-  const { showToast } = useToast()
-
-  function handleReset() {
-    resetCaughtFish()
-    setConfirming(false)
-    showToast("Your caught fish checkmarks have been cleared.")
-  }
-
   return (
     <div>
       <h1 className="font-display text-3xl font-bold mb-4">Settings</h1>
 
-      <div className="border-2 border-marigold-harvest rounded-xl p-4 max-w-md">
-        <h2 className="font-display font-semibold mb-2">Reset progress</h2>
-        <p className="text-sm mb-4">
-          This clears every fish you've marked as caught, so you can start tracking fresh.
-          This can't be undone.
-        </p>
+      <div className="flex flex-col gap-4">
+        <ResetProgressCard
+          title="Reset caught fish"
+          description="This clears every fish you've marked as caught, so you can start tracking fresh. This can't be undone."
+          onReset={resetCaughtFish}
+          toastMessage="Your caught fish checkmarks have been cleared."
+        />
 
-        {!confirming ? (
-          <button
-            onClick={() => setConfirming(true)}
-            className="px-4 py-2 rounded-lg border-2 border-marigold-harvest font-body"
-          >
-            Reset caught fish
-          </button>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-semibold">Are you sure? This will delete all your checkmarks.</p>
-            <div className="flex gap-2">
-              <button
-                onClick={handleReset}
-                className="px-4 py-2 rounded-lg bg-marigold-harvest text-white font-body"
-              >
-                Yes, reset everything
-              </button>
-              <button
-                onClick={() => setConfirming(false)}
-                className="px-4 py-2 rounded-lg border-2 border-sage-meadow font-body"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
+        <ResetProgressCard
+          title="Reset found recipes"
+          description="This clears every recipe you've marked as found, so you can start tracking fresh. This can't be undone."
+          onReset={resetFoundRecipes}
+          toastMessage="Your found recipe checkmarks have been cleared."
+        />
+
+        <ResetProgressCard
+          title="Reset reached hearts"
+          description="This clears every heart level you've marked as reached for every character, so you can start tracking fresh. This can't be undone."
+          onReset={resetReachedHearts}
+          toastMessage="Your reached heart levels have been cleared."
+        />
+
+        <ResetProgressCard
+          title="Reset gifted foods"
+          description="This clears every food you've marked as delivered to a character, so all favorite foods show as silhouettes again. This can't be undone."
+          onReset={resetGiftedFoods}
+          toastMessage="Your gifted food checkmarks have been cleared."
+        />
       </div>
     </div>
   )
