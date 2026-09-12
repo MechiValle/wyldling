@@ -8,6 +8,7 @@ const links = [
   { to: '/characters', label: 'Characters' },
   { to: '/shops', label: 'Shops' },
   { to: '/animals', label: 'Animals' },
+  { to: '/cheats', label: 'Cheats' },
 ];
 
 export function NavBar() {
