@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 
 const links = [
+  { to: '/animals', label: 'Animals' },
+  { to: '/characters', label: 'Characters' },
+  { to: '/cheats', label: 'Cheats' },
+  { to: '/clothing', label: 'Clothing' },
   { to: '/fish', label: 'Fish' },
   { to: '/food', label: 'Food' },
-  { to: '/characters', label: 'Characters' },
   { to: '/shops', label: 'Shops' },
-  { to: '/animals', label: 'Animals' },
-  { to: '/cheats', label: 'Cheats' },
 ];
 
 export function NavBar() {

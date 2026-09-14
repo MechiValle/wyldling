@@ -89,3 +89,23 @@ export function toggleFoodGifted(itemId: number): number[] {
 export function resetGiftedFoods(): void {
   localStorage.removeItem(GIFTED_STORAGE_KEY)
 }
+
+const CRAFTED_OUTFITS_KEY = 'wyldling-crafted-outfits'
+
+export function getCraftedOutfits(): number[] {
+  const stored = localStorage.getItem(CRAFTED_OUTFITS_KEY)
+  return stored ? JSON.parse(stored) : []
+}
+
+export function toggleOutfitCrafted(id: number): number[] {
+  const current = getCraftedOutfits()
+  const updated = current.includes(id)
+    ? current.filter((x) => x !== id)
+    : [...current, id]
+  localStorage.setItem(CRAFTED_OUTFITS_KEY, JSON.stringify(updated))
+  return updated
+}
+
+export function resetCraftedOutfits(): void {
+  localStorage.removeItem(CRAFTED_OUTFITS_KEY)
+}

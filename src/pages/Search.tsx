@@ -8,8 +8,9 @@ import { FoodDetailModal } from '../components/detail-modals/FoodDetailModal';
 import { CharacterDetailModal } from '../components/detail-modals/CharacterDetailModal';
 import { ShopDetailModal } from '../components/detail-modals/ShopDetailModal';
 import { AnimalDetailModal } from '../components/detail-modals/AnimalDetailModal';
+import { OutfitDetailModal } from '../components/detail-modals/OutfitDetailModal';
 
-type ResultType = 'fish' | 'food' | 'character' | 'shop' | 'animal';
+type ResultType = 'fish' | 'food' | 'character' | 'shop' | 'animal' | 'outfit';
 
 type SearchResult = {
   id: number;
@@ -41,7 +42,7 @@ export function Search() {
           .from('items')
           .select('id, name, image_path, category')
           .ilike('name', `%${trimmed}%`)
-          .in('category', ['fish', 'food', 'animal']),
+          .in('category', ['fish', 'food', 'animal', 'outfit']),
         supabase
           .from('characters')
           .select('id, name, image_path, romanceable')
@@ -95,14 +96,25 @@ export function Search() {
     <div>
       <h1 className='font-display text-3xl font-bold mb-4'>Search</h1>
 
-      <input
-        type='text'
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder='Search fish, food, characters, shops...'
-        className='w-full max-w-md border-2 border-sage-meadow rounded-lg px-3 py-2 bg-transparent font-body mb-4'
-        autoFocus
-      />
+      <div className='relative w-full max-w-md mb-4'>
+        <input
+          type='text'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder='Search fish, food, characters, shops...'
+          className='w-full border-2 border-sage-meadow rounded-lg px-3 py-2 pr-9 bg-transparent font-body'
+          autoFocus
+        />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            aria-label='Clear search'
+            className='absolute right-2 top-1/2 -translate-y-1/2 text-lg opacity-60 hover:opacity-100'
+          >
+            ✕
+          </button>
+        )}
+      </div>
 
       {loading && <p className='text-sm italic'>Searching...</p>}
 
@@ -159,6 +171,12 @@ export function Search() {
       {selected?.type === 'shop' && (
         <ShopDetailModal
           shop={selected.raw}
+          onClose={() => setSelected(null)}
+        />
+      )}
+      {selected?.type === 'outfit' && (
+        <OutfitDetailModal
+          outfit={selected.raw}
           onClose={() => setSelected(null)}
         />
       )}

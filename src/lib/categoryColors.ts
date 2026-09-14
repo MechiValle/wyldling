@@ -4,6 +4,8 @@ export const categoryColors = {
   character: 'border-sage-meadow',
   shop: 'border-sage-meadow',
   animal: 'border-dusky-lavender',
+  outfit: 'border-marigold-harvest',
+  material: 'border-sage-meadow',
 } as const
 
 export type CategoryKey = keyof typeof categoryColors

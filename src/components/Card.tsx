@@ -8,9 +8,20 @@ type CardProps = {
   onClick: () => void
   checked?: boolean
   onToggleChecked?: () => void
+  badge?: string | number
+  imageAspect?: 'square' | 'portrait'
 }
 
-export function Card({ image, name, category, onClick, checked, onToggleChecked }: CardProps) {
+export function Card({
+  image,
+  name,
+  category,
+  onClick,
+  checked,
+  onToggleChecked,
+  badge,
+  imageAspect = 'square',
+}: CardProps) {
   return (
     <div
       onClick={onClick}
@@ -24,7 +35,16 @@ export function Card({ image, name, category, onClick, checked, onToggleChecked 
           <FoundCheckbox checked={!!checked} onChange={onToggleChecked} />
         </div>
       )}
-      <img src={image} alt={name} className="w-16 h-16 object-contain rounded-lg" />
+      {badge !== undefined && !onToggleChecked && (
+        <div className="absolute top-2 right-2 bg-marigold-harvest text-white text-xs font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
+          {badge}
+        </div>
+      )}
+      <img
+        src={image}
+        alt={name}
+        className={`${imageAspect === 'portrait' ? 'w-16 h-28' : 'w-16 h-16'} object-contain rounded-lg`}
+      />
       <span className="font-display font-semibold truncate w-full">{name}</span>
     </div>
   )

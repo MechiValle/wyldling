@@ -3,6 +3,7 @@ const PROGRESS_KEYS = [
   'wyldling-found-recipes',
   'wyldling-reached-hearts',
   'wyldling-gifted-foods',
+  'wyldling-crafted-outfits',
 ]
 
 export function exportProgressToFile(): void {

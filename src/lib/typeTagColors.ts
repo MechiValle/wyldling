@@ -4,4 +4,5 @@ export const typeTagStyles: Record<string, string> = {
   character: 'border-sage-meadow text-sage-meadow',
   shop: 'border-sage-meadow text-sage-meadow',
   animal: 'border-dusky-lavender text-dusky-lavender',
+  outfit: 'border-marigold-harvest text-marigold-harvest',
 }
