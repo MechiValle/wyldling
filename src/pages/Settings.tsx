@@ -31,38 +31,38 @@ export function Settings() {
     <div>
       <h1 className="font-display text-3xl font-bold mb-4">Settings</h1>
 
-      <div className="border-2 border-sage-meadow rounded-xl p-4 max-w-md mb-8">
-        <h2 className="font-display font-semibold mb-2">Backup your progress</h2>
-        <p className="text-sm mb-4">
-          Your checkmarks are saved only in this browser. If you clear your browser data or
-          switch devices, they'll be lost unless you back them up first. Download a backup
-          file now, and restore it later on any device.
-        </p>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4">
+        <div className="border-2 border-sage-meadow rounded-xl p-4">
+          <h2 className="font-display font-semibold mb-2">Backup your progress</h2>
+          <p className="text-sm mb-4">
+            Your checkmarks are saved only in this browser. If you clear your browser data or
+            switch devices, they'll be lost unless you back them up first. Download a backup
+            file now, and restore it later on any device.
+          </p>
 
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={exportProgressToFile}
-            className="px-4 py-2 rounded-lg bg-sage-meadow text-white font-body"
-          >
-            Export progress
-          </button>
-          <button
-            onClick={handleImportClick}
-            className="px-4 py-2 rounded-lg border-2 border-sage-meadow font-body"
-          >
-            Import progress
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="application/json"
-            onChange={handleFileSelected}
-            className="hidden"
-          />
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={exportProgressToFile}
+              className="px-4 py-2 rounded-lg bg-sage-meadow text-white font-body"
+            >
+              Export progress
+            </button>
+            <button
+              onClick={handleImportClick}
+              className="px-4 py-2 rounded-lg border-2 border-sage-meadow font-body"
+            >
+              Import progress
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/json"
+              onChange={handleFileSelected}
+              className="hidden"
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-4">
         <ResetProgressCard
           title="Reset caught fish"
           description="This clears every fish you've marked as caught, so you can start tracking fresh. This can't be undone."
