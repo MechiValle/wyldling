@@ -7,6 +7,8 @@ import { OutfitDetailModal } from '../components/detail-modals/OutfitDetailModal
 import { getImageUrl, preloadImages } from '../lib/storage';
 import { getCraftedOutfits, toggleOutfitCrafted } from '../lib/progress';
 import type { Item } from '../types/Item';
+import { useHideCompleted } from '../hooks/useHideCompleted';
+import { HideCompletedToggle } from '../components/HideCompletedToggle';
 
 type OutfitWithCategory = Item & { categoryName: string | null };
 
@@ -28,6 +30,9 @@ export function Clothing() {
 
   const [selected, setSelected] = useState<Item | null>(null);
   const [craftedIds, setCraftedIds] = useState<number[]>([]);
+  const { hideCompleted, toggle: toggleHideCompleted } = useHideCompleted(
+    'wyldling-hide-completed-outfits',
+  );
 
   useEffect(() => {
     setCraftedIds(getCraftedOutfits());
@@ -118,10 +123,12 @@ export function Clothing() {
     setCraftedIds(toggleOutfitCrafted(id));
   }
 
-  const visibleOutfits =
-    activeCategory === 'All'
-      ? outfits
-      : outfits.filter((item) => item.categoryName === activeCategory);
+  const visibleOutfits = outfits
+    .filter(
+      (item) =>
+        activeCategory === 'All' || item.categoryName === activeCategory,
+    )
+    .filter((item) => !hideCompleted || !craftedIds.includes(item.id));
 
   const stillNeeded = (() => {
     const totals = new Map<
@@ -169,6 +176,11 @@ export function Clothing() {
                 options={categoryOptions}
                 active={activeCategory}
                 onChange={setActiveCategory}
+              />
+              <HideCompletedToggle
+                checked={hideCompleted}
+                onChange={toggleHideCompleted}
+                label='Hide already crafted'
               />
 
               <CardGrid>

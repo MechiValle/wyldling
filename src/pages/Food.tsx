@@ -7,6 +7,8 @@ import { FoodDetailModal } from '../components/detail-modals/FoodDetailModal';
 import { getImageUrl, preloadImages } from '../lib/storage';
 import { getFoundRecipes, toggleRecipeFound } from '../lib/progress';
 import type { Item } from '../types/Item';
+import { useHideCompleted } from '../hooks/useHideCompleted';
+import { HideCompletedToggle } from '../components/HideCompletedToggle';
 
 type FoodWithCategory = Item & { categoryName: string | null };
 
@@ -17,6 +19,9 @@ export function Food() {
   const [pageLoading, setPageLoading] = useState(true);
   const [selected, setSelected] = useState<FoodWithCategory | null>(null);
   const [foundIds, setFoundIds] = useState<number[]>([]);
+  const { hideCompleted, toggle: toggleHideCompleted } = useHideCompleted(
+    'wyldling-hide-completed-food',
+  );
 
   useEffect(() => {
     setFoundIds(getFoundRecipes());
@@ -98,10 +103,12 @@ export function Food() {
     setFoundIds(toggleRecipeFound(id));
   }
 
-  const visibleFood =
-    activeCategory === 'All'
-      ? food
-      : food.filter((item) => item.categoryName === activeCategory);
+  const visibleFood = food
+    .filter(
+      (item) =>
+        activeCategory === 'All' || item.categoryName === activeCategory,
+    )
+    .filter((item) => !hideCompleted || !foundIds.includes(item.id));
 
   return (
     <div>
@@ -115,6 +122,12 @@ export function Food() {
             options={categoryOptions}
             active={activeCategory}
             onChange={setActiveCategory}
+          />
+
+          <HideCompletedToggle
+            checked={hideCompleted}
+            onChange={toggleHideCompleted}
+            label='Hide already found'
           />
 
           <CardGrid>
