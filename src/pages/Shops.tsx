@@ -108,8 +108,8 @@ export function Shops() {
           )}
 
           {view === 'Schedule' && (
-            <div className='overflow-x-auto flex justify-center'>
-              <div className='inline-grid grid-cols-[220px_repeat(7,48px)] gap-y-2'>
+            <div className='overflow-x-auto'>
+              <div className='grid w-fit mx-auto grid-cols-[220px_repeat(7,48px)] gap-y-2'>
                 <div className='sticky left-0 bg-oat-linen dark:bg-twilight-plum' />
                 {DAYS.map((day) => (
                   <div

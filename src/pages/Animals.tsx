@@ -96,8 +96,8 @@ export function Animals() {
           )}
 
           {view === 'Breeding Chart' && (
-            <div className='overflow-x-auto flex justify-center'>
-              <div className='inline-grid grid-cols-[140px_repeat(4,120px)] gap-y-2'>
+            <div className='overflow-x-auto'>
+              <div className='grid w-fit mx-auto grid-cols-[140px_repeat(4,120px)] gap-y-2'>
                 <div className='sticky left-0 bg-oat-linen dark:bg-twilight-plum' />
                 {SEASON_ORDER.map((season) => (
                   <div
