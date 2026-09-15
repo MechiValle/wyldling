@@ -10,6 +10,7 @@ import { Search } from './pages/Search'
 import { Settings } from './pages/Settings'
 import { Cheats } from './pages/Cheats'
 import { Clothing } from './pages/Clothing'
+import { Tips } from './pages/Tips'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/cheats" element={<Cheats />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/clothing" element={<Clothing />} />
+          <Route path="/tips" element={<Tips />} />
         </Routes>
       </main>
     </div>

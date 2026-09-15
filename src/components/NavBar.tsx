@@ -10,6 +10,7 @@ const links = [
   { to: '/fish', label: 'Fish' },
   { to: '/food', label: 'Food' },
   { to: '/shops', label: 'Shops' },
+  { to: '/tips', label: 'Tips' },
 ];
 
 export function NavBar() {
