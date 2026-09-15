@@ -77,7 +77,7 @@ export function Cheats() {
         <InstructionStep
           number={1}
           title='Buy Tuna from Bruno'
-          description='Tuna costs 20 gold each.'
+          description='Tuna costs 20 gold each. You will have to expand his shop by catching and selling fish to him in order to be able to buy Tuna.'
         />
         <InstructionStep
           number={2}
@@ -87,7 +87,7 @@ export function Cheats() {
         <InstructionStep
           number={3}
           title='Cook Fish Fingers at home'
-          description='Uses equal amounts of tuna and flour.'
+          description='Uses equal amounts of tuna and flour. Find them in the Oven section as a starter recipe.'
         />
         <InstructionStep
           number={4}
