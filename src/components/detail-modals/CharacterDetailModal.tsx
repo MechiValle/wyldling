@@ -3,7 +3,8 @@ import { supabase } from '../../lib/supabaseClient'
 import { Modal } from '../Modal'
 import { FoundCheckbox } from '../FoundCheckbox'
 import { getImageUrl } from '../../lib/storage'
-import { getReachedHearts, toggleHeartReached, getGiftedFoods, toggleFoodGifted } from '../../lib/progress'
+import { getReachedHearts, toggleHeartReached } from '../../lib/progress'
+import { useGiftedFoods } from '../../context/GiftedFoodsContext'
 import { getHeartLevelName } from '../../lib/heartLevels'
 import { FoodDetailModal } from './FoodDetailModal'
 
@@ -35,12 +36,11 @@ export function CharacterDetailModal({ character, onClose }: Props) {
   const [hearts, setHearts] = useState<HeartLevel[]>([])
   const [loading, setLoading] = useState(true)
   const [reachedIds, setReachedIds] = useState<number[]>([])
-  const [giftedIds, setGiftedIds] = useState<number[]>([])
+  const { giftedIds, toggleGifted } = useGiftedFoods()
   const [selectedFavorite, setSelectedFavorite] = useState<{ id: number; name: string; image_path: string | null } | null>(null)
 
   useEffect(() => {
     setReachedIds(getReachedHearts())
-    setGiftedIds(getGiftedFoods())
   }, [])
 
   useEffect(() => {
@@ -87,10 +87,6 @@ export function CharacterDetailModal({ character, onClose }: Props) {
     setReachedIds(toggleHeartReached(id))
   }
 
-  function handleToggleGifted(itemId: number) {
-    setGiftedIds(toggleFoodGifted(itemId))
-  }
-
   return (
     <>
       <Modal onClose={onClose}>
@@ -127,7 +123,7 @@ export function CharacterDetailModal({ character, onClose }: Props) {
                   </button>
                   <FoundCheckbox
                     checked={giftedIds.includes(f.item_id)}
-                    onChange={() => handleToggleGifted(f.item_id)}
+                    onChange={() => toggleGifted(f.item_id)}
                   />
                 </div>
               ))}

@@ -12,10 +12,12 @@ import {
 } from '../lib/exportProgress';
 import { ResetProgressCard } from '../components/ResetProgressCard';
 import { useToast } from '../context/ToastContext';
+import { useGiftedFoods } from '../context/GiftedFoodsContext';
 
 export function Settings() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
+  const { refresh: refreshGiftedFoods } = useGiftedFoods();
 
   function handleImportClick() {
     fileInputRef.current?.click();
@@ -101,7 +103,10 @@ export function Settings() {
         <ResetProgressCard
           title='Reset gifted foods'
           description="This clears every food you've marked as delivered to a character, so all favorite foods show as silhouettes again. This can't be undone."
-          onReset={resetGiftedFoods}
+          onReset={() => {
+            resetGiftedFoods();
+            refreshGiftedFoods();
+          }}
           toastMessage='Your gifted food checkmarks have been cleared.'
         />
         <ResetProgressCard
