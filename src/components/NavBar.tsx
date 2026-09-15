@@ -10,6 +10,7 @@ import {
   Shirt,
   Lightbulb,
   Sparkles,
+  Settings as SettingsIcon,
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -44,6 +45,13 @@ export function NavBar() {
           <Search size={20} />
         </NavLink>
         <ThemeToggle />
+        <NavLink
+          to='/settings'
+          aria-label='Settings'
+          className='opacity-60 hover:opacity-100'
+        >
+          <SettingsIcon size={20} />
+        </NavLink>
       </nav>
 
       {/* Mobile hamburger button */}
