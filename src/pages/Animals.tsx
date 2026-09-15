@@ -140,6 +140,8 @@ export function Animals() {
           onClose={() => setSelected(null)}
         />
       )}
+
+      <p className='text-xs opacity-50 text-center mt-8 mb-8'>Tip: you must feed the animal their favorite food every single day of the pregnancy in order to get magical offspring</p>
     </div>
   );
 }
