@@ -171,6 +171,9 @@ export function Hairstyles() {
           foreignKeyColumn='hairstyle_item_id'
         />
       )}
+      <p className="text-xs opacity-50 text-center mt-8">
+        Hairstyle data provided by reddit user grngrl6
+      </p>
     </div>
   );
 }
