@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Search,
@@ -11,6 +11,7 @@ import {
   Lightbulb,
   Sparkles,
   Settings as SettingsIcon,
+  Scissors,
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -21,12 +22,20 @@ const links = [
   { to: '/clothing', label: 'Clothing', icon: Shirt },
   { to: '/fish', label: 'Fish', icon: Fish },
   { to: '/food', label: 'Food', icon: UtensilsCrossed },
+  { to: '/hairstyles', label: 'Hairstyles', icon: Scissors },
   { to: '/shops', label: 'Shops', icon: Store },
   { to: '/tips', label: 'Tips', icon: Lightbulb },
 ];
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   return (
     <header className='flex items-center justify-between p-4 border-b border-sage-meadow/30 relative z-40'>
@@ -70,7 +79,7 @@ export function NavBar() {
           onClick={() => setIsOpen(false)}
         >
           <nav
-            className='absolute right-0 top-0 h-full w-64 bg-white dark:bg-[#2b2440] shadow-2xl border-l-2 border-sage-meadow p-6 flex flex-col gap-1'
+            className='absolute right-0 top-0 h-full w-64 bg-white dark:bg-[#2b2440] shadow-2xl border-l-2 border-sage-meadow p-6 flex flex-col gap-1 overflow-y-auto'
             onClick={(e) => e.stopPropagation()}
           >
             <button

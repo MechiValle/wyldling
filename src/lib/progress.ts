@@ -109,3 +109,23 @@ export function toggleOutfitCrafted(id: number): number[] {
 export function resetCraftedOutfits(): void {
   localStorage.removeItem(CRAFTED_OUTFITS_KEY)
 }
+
+const UNLOCKED_HAIRSTYLES_KEY = 'wyldling-unlocked-hairstyles'
+
+export function getUnlockedHairstyles(): number[] {
+  const stored = localStorage.getItem(UNLOCKED_HAIRSTYLES_KEY)
+  return stored ? JSON.parse(stored) : []
+}
+
+export function toggleHairstyleUnlocked(id: number): number[] {
+  const current = getUnlockedHairstyles()
+  const updated = current.includes(id)
+    ? current.filter((x) => x !== id)
+    : [...current, id]
+  localStorage.setItem(UNLOCKED_HAIRSTYLES_KEY, JSON.stringify(updated))
+  return updated
+}
+
+export function resetUnlockedHairstyles(): void {
+  localStorage.removeItem(UNLOCKED_HAIRSTYLES_KEY)
+}

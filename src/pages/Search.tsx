@@ -10,7 +10,14 @@ import { ShopDetailModal } from '../components/detail-modals/ShopDetailModal';
 import { AnimalDetailModal } from '../components/detail-modals/AnimalDetailModal';
 import { OutfitDetailModal } from '../components/detail-modals/OutfitDetailModal';
 
-type ResultType = 'fish' | 'food' | 'character' | 'shop' | 'animal' | 'outfit';
+type ResultType =
+  | 'fish'
+  | 'food'
+  | 'character'
+  | 'shop'
+  | 'animal'
+  | 'outfit'
+  | 'hairstyle';
 
 type SearchResult = {
   id: number;
@@ -42,7 +49,7 @@ export function Search() {
           .from('items')
           .select('id, name, image_path, category')
           .ilike('name', `%${trimmed}%`)
-          .in('category', ['fish', 'food', 'animal', 'outfit']),
+          .in('category', ['fish', 'food', 'animal', 'outfit', 'hairstyle']),
         supabase
           .from('characters')
           .select('id, name, image_path, romanceable')
@@ -178,6 +185,14 @@ export function Search() {
         <OutfitDetailModal
           outfit={selected.raw}
           onClose={() => setSelected(null)}
+        />
+      )}
+      {selected?.type === 'hairstyle' && (
+        <OutfitDetailModal
+          outfit={selected.raw}
+          onClose={() => setSelected(null)}
+          table='hairstyle_materials'
+          foreignKeyColumn='hairstyle_item_id'
         />
       )}
     </div>
